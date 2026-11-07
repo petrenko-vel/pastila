@@ -12,6 +12,12 @@ export const BagIcon = () => (
 export const ArrowIcon = ({ size = 16 }: { size?: number }) => (
   <svg {...base} width={size} height={size} strokeWidth={2}><path d="M5 12h14M13 6l6 6-6 6" /></svg>
 );
+export const ArrowUpRightIcon = ({ size = 18 }: { size?: number }) => (
+  <svg {...base} width={size} height={size} strokeWidth={2.2}><path d="M7 17L17 7M9 7h8v8" /></svg>
+);
+export const FilterIcon = ({ size = 18 }: { size?: number }) => (
+  <svg {...base} width={size} height={size} strokeWidth={2}><path d="M4 7h10M18 7h2M4 17h2M10 17h10" /><circle cx="16" cy="7" r="2" /><circle cx="8" cy="17" r="2" /></svg>
+);
 export const PlusIcon = () => (
   <svg {...base} width={16} height={16} strokeWidth={2}><path d="M12 5v14M5 12h14" /></svg>
 );

@@ -1,15 +1,18 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useCart } from '../../components/CartProvider';
+import LampViewer from '../../components/LampViewer';
+import { img } from '../../lib/base';
 import { formatPrice, palette } from '../../lib/products';
 
-type Shape = 'vase' | 'candle' | 'lamp';
+type Shape = 'vase' | 'candle' | 'lamp' | 'letters';
 
 const shapes: { key: Shape; name: string; base: number }[] = [
   { key: 'vase', name: 'Ваза', base: 1200 },
   { key: 'candle', name: 'Свеча', base: 600 },
   { key: 'lamp', name: 'Лампа', base: 2400 },
+  { key: 'letters', name: 'Буквы', base: 450 }, // цена за одну букву
 ];
 
 function shade(hex: string, amt: number) {
@@ -81,17 +84,29 @@ export default function GeneratorPage() {
   const [colorKey, setColorKey] = useState('pink');
   const [size, setSize] = useState(100);
   const [toast, setToast] = useState(false);
+  const [text, setText] = useState('ДОМ');
   const { add } = useCart();
+
+  // ссылка из каталога: /generator?shape=letters
+  useEffect(() => {
+    const q = new URLSearchParams(window.location.search);
+    const s = q.get('shape');
+    if (s === 'vase' || s === 'candle' || s === 'lamp' || s === 'letters') setShape(s);
+    const t = q.get('text');
+    if (t) setText(t.slice(0, 8).toUpperCase());
+  }, []);
 
   const color = palette.find((p) => p.key === colorKey)!;
   const meta = shapes.find((s) => s.key === shape)!;
-  const price = Math.round((meta.base * Math.pow(size / 100, 2)) / 10) * 10;
-  const height = Math.round((shape === 'lamp' ? 24 : shape === 'vase' ? 20 : 10) * (size / 100));
+  const count = Math.max(1, [...text.replace(/\s/g, '')].length);
+  const baseCost = shape === 'letters' ? meta.base * count : meta.base;
+  const price = Math.round((baseCost * Math.pow(size / 100, 2)) / 10) * 10;
+  const height = Math.round((shape === 'lamp' ? 19 : shape === 'vase' ? 20 : shape === 'letters' ? 8 : 10) * (size / 100));
 
   const addToCart = () => {
     add({
-      id: `custom-${shape}-${colorKey}-${size}`,
-      title: `${meta.name} (свой дизайн)`,
+      id: `custom-${shape}-${colorKey}-${size}${shape === 'letters' ? '-' + text : ''}`,
+      title: shape === 'letters' ? `Буквы «${text}» (свой дизайн)` : `${meta.name} (свой дизайн)`,
       price,
       note: `${color.name}, высота ~${height} см`,
     });
@@ -109,7 +124,13 @@ export default function GeneratorPage() {
       <div className="gen-wrap">
         <div className="stage">
           <div className="stage-model" style={{ transform: `scale(${0.55 + size / 220})` }}>
-            <Model shape={shape} color={color.hex} />
+            {shape === 'lamp' ? (
+              <LampViewer color={color.hex} />
+            ) : shape === 'letters' ? (
+              <LettersPreview text={text} color={color.hex} />
+            ) : (
+              <Model shape={shape} color={color.hex} />
+            )}
           </div>
         </div>
 
@@ -119,16 +140,43 @@ export default function GeneratorPage() {
             <div className="shape-row">
               {shapes.map((s) => (
                 <button key={s.key} className={`shape-btn ${shape === s.key ? 'on' : ''}`} onClick={() => setShape(s.key)}>
-                  <svg viewBox={s.key === 'vase' ? '0 0 200 280' : s.key === 'candle' ? '0 0 200 220' : '0 0 220 300'}>
-                    <g>
-                      <ModelMini shape={s.key} />
-                    </g>
-                  </svg>
+                  {s.key === 'lamp' ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img className="shape-img" src={img('/img/lamp-shade.webp')} alt="" width={389} height={420} />
+                  ) : s.key === 'letters' ? (
+                    <span className="shape-letter" aria-hidden>
+                      Аб
+                    </span>
+                  ) : (
+                    <svg viewBox={s.key === 'vase' ? '0 0 200 280' : '0 0 200 220'}>
+                      <g>
+                        <ModelMini shape={s.key} />
+                      </g>
+                    </svg>
+                  )}
                   {s.name}
                 </button>
               ))}
             </div>
           </div>
+
+          {shape === 'letters' && (
+            <div className="field">
+              <label htmlFor="word">Слово или имя</label>
+              <input
+                id="word"
+                className="text-input"
+                value={text}
+                maxLength={8}
+                placeholder="Например, ДОМ"
+                onChange={(e) => setText(e.target.value.toUpperCase())}
+              />
+              <div className="size-val">
+                <span>До 8 букв</span>
+                <span>Букв: {count}</span>
+              </div>
+            </div>
+          )}
 
           <div className="field">
             <b>Цвет — {color.name}</b>
@@ -168,6 +216,46 @@ export default function GeneratorPage() {
       </div>
       {toast && <div className="toast">Добавили в корзину ♡</div>}
     </div>
+  );
+}
+
+function LettersPreview({ text, color }: { text: string; color: string }) {
+  // SVG-текст с круглыми стыками обводки даёт «надутые» мягкие буквы
+  const chars = [...(text || '·')];
+  const n = chars.length;
+  const cell = 96;
+  const tilt = [-6, 4, -3, 6, -5, 3, -4, 5];
+  const lift = [0, -6, 4, -3, 5, -5, 3, -6];
+  const width = Math.min(300, n * 104);
+  return (
+    <svg
+      className="letters-preview"
+      viewBox={`0 0 ${n * cell + 10} 150`}
+      style={{ width }}
+      role="img"
+      aria-label={`Буквы: ${text}`}
+    >
+      {chars.map((ch, i) => {
+        const cx = 5 + cell / 2 + i * cell;
+        return (
+          <text
+            key={i}
+            x={cx}
+            y={112 + lift[i % 8]}
+            textAnchor="middle"
+            transform={`rotate(${tilt[i % 8]} ${cx} 80)`}
+            fill={color}
+            stroke={color}
+            strokeWidth={11}
+            strokeLinejoin="round"
+            strokeLinecap="round"
+            style={{ paintOrder: 'stroke', fontSize: 104 }}
+          >
+            {ch === ' ' ? '\u00a0' : ch}
+          </text>
+        );
+      })}
+    </svg>
   );
 }
 

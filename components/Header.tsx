@@ -1,11 +1,13 @@
 'use client';
 
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import { useCart, useFavs } from './CartProvider';
 import { BagIcon, HeartIcon, SearchIcon } from './Icons';
+import { SHOW_HIDDEN_BLOCKS } from '../lib/flags';
 
-const nav = [
+const allNav = [
   { href: '/catalog', label: 'Каталог' },
   { href: '/generator', label: 'Генератор' },
   { href: '/#about', label: 'О студии' },
@@ -13,18 +15,22 @@ const nav = [
   { href: '/#reviews', label: 'Отзывы' },
 ];
 
+const nav = allNav.filter((n) => SHOW_HIDDEN_BLOCKS || (n.href !== '/#about' && n.href !== '/#faq'));
+
 export default function Header() {
   const { count } = useCart();
   const { favs } = useFavs();
   const [open, setOpen] = useState(false);
+  const isHome = usePathname() === '/';
+  if (isHome) return null; // на главной своя панель в первом экране
 
   return (
     <header className="header">
       <div className="container header-in">
-        <Link href="/" className="logo" onClick={() => setOpen(false)}>
+        <Link href="/" className="logo" aria-label="pastila — на главную" onClick={() => setOpen(false)}>
           pastila
         </Link>
-        <nav className={`nav ${open ? 'open' : ''}`}>
+        <nav id="main-nav" aria-label="Основная навигация" className={`nav ${open ? 'open' : ''}`}>
           {nav.map((n) => (
             <Link key={n.href} href={n.href} onClick={() => setOpen(false)}>
               {n.label}
@@ -45,7 +51,7 @@ export default function Header() {
           <Link href="/cart" className="cart-pill">
             Корзина ({count})
           </Link>
-          <button className="burger" aria-label="Меню" onClick={() => setOpen((v) => !v)}>
+          <button className="burger" aria-label="Меню" aria-expanded={open} aria-controls="main-nav" onClick={() => setOpen((v) => !v)}>
             <span />
             <span />
           </button>

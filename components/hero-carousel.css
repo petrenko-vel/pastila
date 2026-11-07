@@ -1,0 +1,398 @@
+/* pastila — первый экран. Кадр 1440×1080, единица --u = min(100vw/1440, 100vh/1080).
+   Цвета берутся из токенов сайта (globals.css). */
+.hc {
+  --u: min(calc(100vw / 1440), calc(100vh / 985)); /* крупнее: раньше делили высоту экрана на 1080 */
+  --hc-bg: var(--bg);
+  --hc-ink: var(--bean);
+  --hc-accent: var(--cinnabar);
+  --hc-hl: var(--yellow);
+  --hc-sub: #5f5b4b;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  background: var(--hc-bg);
+  color: var(--hc-ink);
+  font-family: var(--hc-font-ui), var(--font-main), system-ui, sans-serif;
+  overflow: hidden;
+}
+.hc *,
+.hc *::before,
+.hc *::after {
+  box-sizing: border-box;
+}
+.hc :focus-visible {
+  outline: 3px solid var(--hc-accent);
+  outline-offset: 3px;
+}
+/* до запуска входной анимации всё скрыто, чтобы не мигало */
+.hc[data-ready='0'] [data-in] {
+  opacity: 0;
+}
+.hc a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.hc-frame {
+  position: relative;
+  width: calc(var(--u) * 1440);
+  height: calc(var(--u) * 1050);
+  flex: none;
+}
+.hc-frame > * {
+  position: absolute;
+}
+
+/* top bar */
+.hc-logo {
+  left: calc(var(--u) * 37);
+  top: calc(var(--u) * 24);
+  font-family: var(--font-logo), var(--font-main), sans-serif;
+  font-weight: 800;
+  font-size: calc(var(--u) * 40);
+  letter-spacing: -0.02em;
+  line-height: calc(var(--u) * 50);
+}
+.hc-nav {
+  left: calc(var(--u) * 455);
+  top: calc(var(--u) * 36);
+  display: flex;
+  gap: calc(var(--u) * 36);
+  font-size: calc(var(--u) * 20);
+  line-height: calc(var(--u) * 28);
+}
+.hc-nav a:hover {
+  color: var(--hc-accent);
+}
+.hc-btn {
+  top: calc(var(--u) * 24);
+  height: calc(var(--u) * 50);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  font-size: calc(var(--u) * 19);
+  font-weight: 500;
+  transition: transform 0.2s;
+}
+.hc-btn:hover {
+  transform: translateY(-1px);
+}
+.hc-fav {
+  left: calc(var(--u) * 1068);
+  width: calc(var(--u) * 142);
+  background: #fff;
+}
+.hc-cart {
+  left: calc(var(--u) * 1222);
+  width: calc(var(--u) * 166);
+  background: var(--hc-ink);
+  color: #fff !important;
+}
+
+.hc-badge {
+  left: 0;
+  right: 0;
+  top: calc(var(--u) * 115);
+  margin: 0 auto;
+  width: fit-content;
+  height: calc(var(--u) * 37);
+  padding: 0 calc(var(--u) * 22);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: var(--hc-hl);
+  color: var(--hc-ink);
+  font-size: calc(var(--u) * 15);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.hc-h {
+  left: calc(var(--u) * 230);
+  right: calc(var(--u) * 230);
+  top: calc(var(--u) * 150);
+  margin: 0;
+  text-align: center;
+  font-family: var(--hc-font-head), 'Inter Tight', sans-serif;
+  font-weight: 700;
+  font-size: calc(var(--u) * 62);
+  line-height: calc(var(--u) * 66);
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+  color: var(--hc-ink);
+}
+.hc-h span {
+  display: block;
+}
+.hc-sub {
+  left: 0;
+  right: 0;
+  top: calc(var(--u) * 394);
+  margin: 0 auto;
+  width: calc(var(--u) * 800);
+  text-align: center;
+  font-size: calc(var(--u) * 20.8);
+  line-height: calc(var(--u) * 32);
+  color: var(--hc-sub);
+}
+
+/* карусель: на весь кадр, края режет кадр */
+.hc-cards {
+  /* на всю ширину экрана, от стенки до стенки */
+  left: calc(50% - 50vw);
+  top: 0;
+  width: 100vw;
+  height: 100%;
+  overflow: hidden;
+  cursor: grab;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+  z-index: 1;
+  pointer-events: none;
+}
+.hc-cards.hc-grabbing {
+  cursor: grabbing;
+}
+.hc-card {
+  position: absolute;
+  left: 0;
+  top: 0;
+  overflow: hidden;
+  background: #bcd2a8;
+  pointer-events: auto;
+  will-change: transform;
+}
+.hc-poster,
+.hc-video {
+  position: absolute;
+  left: 0;
+  top: 0;
+  max-width: none;
+  object-fit: fill;
+  -webkit-user-drag: none;
+  will-change: transform;
+}
+.hc-cover {
+  object-fit: cover;
+}
+.hc-video {
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+.hc-video.hc-on {
+  opacity: 1;
+}
+.hc-play {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+.hc-play svg {
+  width: 56%;
+  height: 56%;
+}
+
+/* пометки */
+.hc-doodles {
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+  overflow: visible;
+}
+.hc-doodles g {
+  stroke: var(--hc-accent);
+}
+.hc-doodles path {
+  stroke-dasharray: 1;
+}
+.hc-note {
+  margin: 0;
+  z-index: 2;
+  font-family: var(--hc-font-note), 'Caveat', cursive;
+  font-weight: 600;
+  font-size: calc(var(--u) * 34);
+  line-height: 0.95;
+  color: var(--hc-accent);
+  transform-origin: 0 0;
+  white-space: nowrap;
+  pointer-events: none;
+}
+.hc-note-print {
+  left: calc(var(--u) * 1225);
+  top: calc(var(--u) * 310);
+  font-size: calc(var(--u) * 31);
+  transform: rotate(14deg);
+}
+.hc-note-color {
+  left: calc(var(--u) * 800);
+  top: calc(var(--u) * 990);
+  transform: rotate(-3deg);
+}
+
+/* кнопки внизу */
+.hc-cta-ring {
+  left: calc(var(--u) * 546);
+  top: calc(var(--u) * 901);
+  width: calc(var(--u) * 210);
+  height: calc(var(--u) * 74);
+  display: grid;
+  place-items: center;
+  border: calc(var(--u) * 2) dashed var(--hc-accent);
+  border-radius: 999px;
+  z-index: 3;
+}
+.hc-cta {
+  width: calc(var(--u) * 190);
+  height: calc(var(--u) * 58);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: var(--hc-accent);
+  color: var(--hc-ink) !important;
+  font-size: calc(var(--u) * 18);
+  font-weight: 600;
+  transition: transform 0.2s;
+}
+.hc-cta:hover {
+  transform: scale(1.04);
+}
+.hc-cta:focus-visible {
+  outline-color: var(--hc-ink);
+}
+.hc-cta2 {
+  left: calc(var(--u) * 778);
+  top: calc(var(--u) * 909);
+  width: calc(var(--u) * 168);
+  height: calc(var(--u) * 58);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: calc(var(--u) * 2) solid var(--hc-ink);
+  border-radius: 999px;
+  font-size: calc(var(--u) * 18);
+  font-weight: 600;
+  z-index: 3;
+  transition: background 0.2s, color 0.2s;
+}
+.hc-cta2:hover {
+  background: var(--hc-ink);
+  color: var(--hc-bg) !important;
+}
+
+/* ---------- телефоны ---------- */
+@media (max-width: 820px) {
+  .hc {
+    --pu: calc(100vw / 640);
+  }
+  .hc-frame {
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px 16px 44px;
+    text-align: center;
+  }
+  .hc-frame > * {
+    position: static;
+  }
+  /* верх: логотип и корзина */
+  .hc-logo {
+    align-self: flex-start;
+    font-size: 26px;
+    line-height: 1;
+  }
+  .hc-nav,
+  .hc-fav,
+  .hc-doodles,
+  .hc-note-print {
+    display: none;
+  }
+  .hc-cart {
+    position: absolute;
+    right: 16px;
+    top: 14px;
+    left: auto;
+    width: 118px;
+    height: 38px;
+    font-size: 14px;
+  }
+  .hc-badge {
+    height: auto;
+    margin-top: 32px;
+    padding: 9px 16px;
+    font-size: 12px;
+  }
+  .hc-h {
+    margin-top: 34px;
+    font-size: clamp(31px, 8.6vw, 46px);
+    line-height: 1.06;
+  }
+  .hc-sub {
+    margin-top: 16px;
+    width: auto;
+    max-width: 440px;
+    font-size: 16px;
+    line-height: 1.55;
+  }
+  .hc-cards {
+    position: relative;
+    left: 0;
+    width: calc(100% + 32px);
+    margin: 22px -16px 0;
+    height: 250px;
+  }
+  .hc-cta-ring {
+    order: 2;
+    position: relative;
+    left: auto;
+    top: auto;
+    margin-top: 22px;
+    width: 230px;
+    height: 74px;
+    border-width: 2px;
+  }
+  .hc-cta {
+    width: 210px;
+    height: 58px;
+    font-size: 18px;
+  }
+  .hc-cta2 {
+    order: 3;
+    margin-top: 12px;
+    width: 230px;
+    height: 54px;
+    font-size: 17px;
+    border-width: 2px;
+  }
+  .hc-note-color {
+    order: 4;
+    position: relative;
+    left: auto;
+    top: auto;
+    margin-top: 10px;
+    font-size: 30px;
+    transform: rotate(-4deg);
+    transform-origin: 50% 50%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hc-video {
+    display: none;
+  }
+}

@@ -9,7 +9,7 @@ import { img } from '../lib/base';
 
 /* ---------- Палитра ---------- */
 export function PaletteBlock() {
-  const [active, setActive] = useState(1);
+  const [active, setActive] = useState(0);
   const cur = palette[active];
   return (
     <>
@@ -39,7 +39,7 @@ export function PaletteBlock() {
 const recent = [
   { id: 'vase-wave', img: '/img/thumb-vase.webp', alt: 'Ваза «Волна»' },
   { id: 'switch-flower', img: '/img/thumb-switch.webp', alt: 'Накладка «Цветок»' },
-  { id: 'lamp-mushroom-olive', img: '/img/thumb-lamp.webp', alt: 'Лампа «Грибок»' },
+  { id: 'lamp-scallop', img: '/img/lamp-5.webp', alt: 'Лампа «Волна»' },
   { id: 'candle-bubble', img: '/img/thumb-candle.webp', alt: 'Свеча «Бабл»' },
 ];
 
