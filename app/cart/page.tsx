@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { useCart } from '../../components/CartProvider';
+import { img } from '../../lib/base';
 import { formatPrice } from '../../lib/products';
 
 export default function CartPage() {
@@ -44,7 +45,7 @@ export default function CartPage() {
               <div className="cart-row" key={i.id}>
                 {i.image ? (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img src={i.image} alt="" />
+                  <img src={img(i.image)} alt="" />
                 ) : (
                   <div className="ph" />
                 )}

@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { img } from '../lib/base';
 import Reveal from '../components/Reveal';
 import { ArrowIcon, SunIcon } from '../components/Icons';
 import { FaqBlock, PaletteBlock, RecentGrid, ReviewsBlock } from '../components/HomeClient';
@@ -10,7 +11,7 @@ export default function Home() {
       <section className="hero">
         <div className="hero-art" aria-hidden>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/img/hero.webp" alt="" />
+          <img src={img('/img/hero.webp')} alt="" />
         </div>
         <div className="container hero-in">
           <h1 className="hero-logo">pastila</h1>
@@ -49,7 +50,7 @@ export default function Home() {
               </p>
             </div>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/img/cat-switch.webp" alt="" className="cat-img" />
+            <img src={img('/img/cat-switch.webp')} alt="" className="cat-img" />
             <span className="round-arrow"><ArrowIcon size={14} /></span>
           </Link>
         </Reveal>
@@ -69,7 +70,7 @@ export default function Home() {
               </p>
             </div>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/img/cat-vase.webp" alt="" className="cat-img" />
+            <img src={img('/img/cat-vase.webp')} alt="" className="cat-img" />
             <span className="round-arrow"><ArrowIcon size={14} /></span>
           </Link>
         </Reveal>
@@ -86,7 +87,7 @@ export default function Home() {
               </p>
             </div>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/img/cat-lamp.webp" alt="" className="cat-img" />
+            <img src={img('/img/cat-lamp.webp')} alt="" className="cat-img" />
             <span className="round-arrow"><ArrowIcon size={14} /></span>
           </Link>
         </Reveal>
@@ -114,7 +115,7 @@ export default function Home() {
         </Reveal>
         <Reveal className="palette-photo" delay={100}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/img/palette-photo.webp" alt="Интерьер с вазой и свечой" />
+          <img src={img('/img/palette-photo.webp')} alt="Интерьер с вазой и свечой" />
         </Reveal>
         <Reveal className="recent" delay={180}>
           <div className="recent-head">
@@ -132,7 +133,7 @@ export default function Home() {
         <Reveal className="gen-banner">
           <div className="gen-blob" aria-hidden />
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/img/gen-art.webp" alt="" className="gen-art" />
+          <img src={img('/img/gen-art.webp')} alt="" className="gen-art" />
           <div className="gen-text">
             <h2>
               Создай свой
@@ -167,7 +168,7 @@ export default function Home() {
               </Link>
             </div>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/img/about-printer.webp" alt="3D принтер" className="about-img" />
+            <img src={img('/img/about-printer.webp')} alt="3D принтер" className="about-img" />
           </div>
         </Reveal>
         <Reveal className="bottom-faq" delay={180}>

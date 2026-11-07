@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import Reveal from '../../components/Reveal';
 import { useCart, useFavs } from '../../components/CartProvider';
 import { HeartIcon } from '../../components/Icons';
+import { img } from '../../lib/base';
 import { categoryNames, Category, formatPrice, palette, products } from '../../lib/products';
 
 const cats: ('all' | Category)[] = ['all', 'switch', 'vase', 'lamp', 'candle'];
@@ -99,7 +100,7 @@ export default function CatalogView() {
               <article className="pcard">
                 <div className="pimg">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={p.image} alt={p.title} loading="lazy" />
+                  <img src={img(p.image)} alt={p.title} loading="lazy" />
                   <button className={`heart-mini ${favs.includes(p.id) ? 'on' : ''}`} aria-label="В избранное" onClick={() => toggle(p.id)}>
                     <HeartIcon filled={favs.includes(p.id)} />
                   </button>

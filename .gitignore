@@ -3,3 +3,4 @@ node_modules
 .claude
 next-env.d.ts
 *.log
+out

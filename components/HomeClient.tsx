@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { ArrowIcon, HeartIcon, PlusIcon, StarIcon } from './Icons';
 import { useFavs } from './CartProvider';
 import { palette } from '../lib/products';
+import { img } from '../lib/base';
 
 /* ---------- Палитра ---------- */
 export function PaletteBlock() {
@@ -50,7 +51,7 @@ export function RecentGrid() {
         <div className="recent-item" key={r.id}>
           <Link href="/catalog" aria-label={r.alt}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={r.img} alt={r.alt} loading="lazy" />
+            <img src={img(r.img)} alt={r.alt} loading="lazy" />
           </Link>
           <button className={`heart-mini ${favs.includes(r.id) ? 'on' : ''}`} aria-label="В избранное" onClick={() => toggle(r.id)}>
             <HeartIcon filled={favs.includes(r.id)} />
@@ -89,7 +90,7 @@ export function ReviewsBlock() {
         </button>
         <div className="review-card" key={i}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/img/avatar.webp" alt="" className="avatar" />
+          <img src={img('/img/avatar.webp')} alt="" className="avatar" />
           <p>{reviews[i].text}</p>
         </div>
         <button className="arrow-btn flip" aria-label="Дальше" onClick={() => go(1)}>
