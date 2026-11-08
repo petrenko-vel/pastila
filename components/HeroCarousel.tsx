@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { useEffect, useRef } from 'react';
 import { useCart } from './CartProvider';
 import { img } from '../lib/base';
-import { SHOW_HIDDEN_BLOCKS } from '../lib/flags';
 import './hero-carousel.css';
 
 const interTight = Inter_Tight({ subsets: ['latin', 'cyrillic'], weight: ['700'], variable: '--hc-font-head', display: 'swap' });
@@ -322,8 +321,8 @@ export default function HeroCarousel() {
         <nav className="hc-nav" data-in="nav" aria-label="Основная навигация">
           <Link href="/catalog">Каталог</Link>
           <Link href="/generator">Генератор</Link>
-          {SHOW_HIDDEN_BLOCKS && <Link href="/#about">О студии</Link>}
-          {SHOW_HIDDEN_BLOCKS && <Link href="/#faq">FAQ</Link>}
+          <Link href="/about">О студии</Link>
+          <Link href="/#faq">FAQ</Link>
           <Link href="/#reviews">Отзывы</Link>
         </nav>
         <Link className="hc-btn hc-fav" href="/catalog?fav=1" data-in="nav">

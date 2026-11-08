@@ -5,17 +5,16 @@ import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import { useCart, useFavs } from './CartProvider';
 import { BagIcon, HeartIcon, SearchIcon } from './Icons';
-import { SHOW_HIDDEN_BLOCKS } from '../lib/flags';
 
 const allNav = [
   { href: '/catalog', label: 'Каталог' },
   { href: '/generator', label: 'Генератор' },
-  { href: '/#about', label: 'О студии' },
+  { href: '/about', label: 'О студии' },
   { href: '/#faq', label: 'FAQ' },
   { href: '/#reviews', label: 'Отзывы' },
 ];
 
-const nav = allNav.filter((n) => SHOW_HIDDEN_BLOCKS || (n.href !== '/#about' && n.href !== '/#faq'));
+const nav = allNav;
 
 export default function Header() {
   const { count } = useCart();

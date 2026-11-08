@@ -1,0 +1,394 @@
+/* Блок «Коллекции Pastila». Префикс col-. */
+.col-wrap {
+  margin-top: 72px;
+}
+
+.col-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px 48px;
+  margin-bottom: 28px;
+  padding: 0 4px;
+}
+.col-eyebrow {
+  margin: 0 0 8px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.col-title {
+  margin: 0;
+  font-family: var(--font-logo), sans-serif;
+  font-weight: 800;
+  font-size: clamp(36px, 5.4vw, 76px);
+  line-height: 0.95;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: var(--bean);
+}
+.col-lead {
+  margin: 0;
+  max-width: 380px;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+/* асимметричная сетка: ширины и наклоны повторяются по кругу, без привязки к данным */
+.col-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 20px;
+}
+.col-item {
+  grid-column: span 6;
+  min-width: 0;
+}
+.col-item:nth-child(4n + 1) {
+  grid-column: span 7;
+  --col-rot: -1.6deg;
+}
+.col-item:nth-child(4n + 2) {
+  grid-column: span 5;
+  --col-rot: 1.4deg;
+  margin-top: 36px;
+}
+.col-item:nth-child(4n + 3) {
+  grid-column: span 5;
+  --col-rot: 2deg;
+}
+.col-item:nth-child(4n + 4) {
+  grid-column: span 7;
+  --col-rot: -1deg;
+  margin-top: 36px;
+}
+.col-reveal {
+  height: 100%;
+}
+
+.col-poster {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 12px;
+  height: 100%;
+  min-height: 440px;
+  padding: 22px 26px 26px;
+  border-radius: 40px;
+  overflow: hidden;
+  color: var(--bean);
+  transform: rotate(var(--col-rot, 0deg));
+  transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 0.4s;
+}
+a.col-poster:hover {
+  transform: rotate(0deg) translateY(-8px);
+  box-shadow: 0 28px 36px -24px rgba(30, 30, 30, 0.65);
+}
+a.col-poster:active {
+  transform: rotate(0deg) translateY(-4px) scale(0.98);
+}
+a.col-poster:focus-visible {
+  outline: 3px solid var(--bean);
+  outline-offset: 4px;
+}
+
+.col-tone-carnation {
+  background: var(--carnation);
+}
+.col-tone-yellow {
+  background: var(--yellow);
+}
+.col-tone-beige {
+  background: var(--beige);
+}
+.col-tone-cinnabar {
+  background: var(--cinnabar);
+}
+.col-tone-bean {
+  background: var(--bean);
+  color: var(--mimosa);
+}
+
+.col-top {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.col-num {
+  font-family: var(--font-logo), sans-serif;
+  font-weight: 800;
+  font-size: 15px;
+  letter-spacing: 0.1em;
+}
+.col-badge {
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: var(--bg);
+  color: var(--bean);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.col-badge-coming-soon {
+  background: var(--bean);
+  color: var(--mimosa);
+}
+
+/* композиция обложки */
+.col-art {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 170px;
+  z-index: 1;
+}
+.col-pic {
+  position: absolute;
+  display: block;
+  object-fit: cover;
+  border-radius: 26px;
+  background: var(--bg);
+  box-shadow: 0 16px 24px -14px rgba(30, 30, 30, 0.55);
+  transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.col-pic-1 {
+  width: 46%;
+  aspect-ratio: 1;
+  left: 2%;
+  top: 6%;
+  transform: rotate(-4deg);
+}
+.col-pic-2 {
+  width: 38%;
+  aspect-ratio: 1;
+  left: 34%;
+  top: 28%;
+  transform: rotate(3deg);
+  z-index: 2;
+}
+.col-pic-3 {
+  width: 32%;
+  aspect-ratio: 1;
+  right: 2%;
+  top: 0;
+  transform: rotate(6deg);
+}
+.col-art-1 .col-pic-1 {
+  width: 62%;
+  left: 18%;
+  top: 4%;
+  transform: rotate(-3deg);
+}
+.col-art-2 .col-pic-1 {
+  width: 52%;
+  left: 4%;
+}
+.col-art-2 .col-pic-2 {
+  width: 46%;
+  left: auto;
+  right: 4%;
+  top: 14%;
+}
+.col-art-cover .col-pic-1 {
+  width: 80%;
+  left: 10%;
+}
+a.col-poster:hover .col-pic-1 {
+  transform: rotate(0deg) translateY(-6px);
+}
+a.col-poster:hover .col-pic-2 {
+  transform: rotate(0deg) translateY(-10px);
+}
+a.col-poster:hover .col-pic-3 {
+  transform: rotate(0deg) translateY(-4px);
+}
+
+/* запасная композиция без фото */
+.col-blob {
+  position: absolute;
+  border-radius: 50%;
+}
+.col-blob-1 {
+  width: 46%;
+  aspect-ratio: 1;
+  left: 4%;
+  top: 4%;
+  background: var(--yellow);
+}
+.col-blob-2 {
+  width: 34%;
+  aspect-ratio: 1;
+  right: 8%;
+  top: 22%;
+  background: var(--carnation);
+}
+.col-blob-3 {
+  width: 24%;
+  aspect-ratio: 1;
+  left: 40%;
+  bottom: 0;
+  background: var(--bg);
+}
+
+.col-text {
+  position: relative;
+  z-index: 3;
+  padding-right: 64px;
+}
+.col-name {
+  margin: 0;
+  font-family: var(--font-logo), sans-serif;
+  font-weight: 800;
+  font-size: clamp(30px, 4vw, 56px);
+  line-height: 0.95;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+}
+.col-tagline {
+  margin: 10px 0 0;
+  font-size: 15px;
+  font-weight: 700;
+}
+.col-desc {
+  margin: 6px 0 0;
+  max-width: 460px;
+  font-size: 14px;
+  line-height: 1.45;
+  opacity: 0.8;
+}
+.col-go,
+.col-soon {
+  display: inline-block;
+  margin-top: 14px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.col-go {
+  padding-bottom: 2px;
+  border-bottom: 2px solid currentColor;
+}
+.col-soon {
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 2px dashed currentColor;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+}
+
+/* стрелка как .work-arrow */
+.col-arrow {
+  position: absolute;
+  right: 26px;
+  bottom: 26px;
+  z-index: 4;
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #fff;
+  color: var(--cinnabar);
+  border: 2px solid var(--cinnabar);
+  box-shadow: 0 4px 10px -4px rgba(30, 30, 30, 0.35);
+  transition: transform 0.25s, background 0.25s, color 0.25s, border-color 0.25s;
+}
+a.col-poster:hover .col-arrow,
+a.col-poster:focus-visible .col-arrow {
+  background: var(--bean);
+  border-color: var(--bean);
+  color: var(--mimosa);
+  transform: translate(2px, -2px);
+}
+
+@media (max-width: 1023px) {
+  .col-wrap {
+    margin-top: 56px;
+  }
+  .col-head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .col-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+  .col-item,
+  .col-item:nth-child(n) {
+    grid-column: span 1;
+    margin-top: 0;
+  }
+  .col-item:nth-child(even) {
+    margin-top: 28px;
+  }
+  .col-poster {
+    min-height: 400px;
+    padding: 18px 20px 22px;
+    border-radius: 32px;
+  }
+  .col-text {
+    padding-right: 0;
+    padding-bottom: 56px;
+  }
+  .col-arrow {
+    right: 18px;
+    bottom: 18px;
+  }
+}
+
+/* телефон: горизонтальная лента со scroll-snap */
+@media (max-width: 560px) {
+  .col-grid {
+    display: flex;
+    gap: 14px;
+    margin: 0 -16px;
+    padding: 6px 16px 18px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding: 0 16px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .col-item,
+  .col-item:nth-child(n) {
+    flex: 0 0 82%;
+    margin-top: 0;
+    scroll-snap-align: start;
+  }
+  .col-poster {
+    min-height: 420px;
+  }
+  .col-lead {
+    font-size: 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .col-poster,
+  .col-pic,
+  .col-arrow {
+    transition: none;
+  }
+  a.col-poster:hover,
+  a.col-poster:active {
+    transform: rotate(var(--col-rot, 0deg));
+  }
+  a.col-poster:hover .col-pic-1,
+  a.col-poster:hover .col-pic-2,
+  a.col-poster:hover .col-pic-3 {
+    transform: none;
+  }
+  .col-grid {
+    scroll-behavior: auto;
+  }
+}

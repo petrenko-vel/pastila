@@ -1,0 +1,466 @@
+/* Блок «Один предмет — множество настроений». Префикс cx- */
+.cx {
+  margin-top: 84px;
+  overflow-x: clip;
+}
+.cx-head {
+  max-width: 760px;
+  margin-bottom: 28px;
+}
+.cx-eyebrow {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: var(--yellow);
+  color: var(--bean);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.cx-head h2 {
+  margin-top: 14px;
+  font-family: var(--font-logo), var(--font-main), sans-serif;
+  font-weight: 800;
+  font-size: clamp(30px, 4.6vw, 56px);
+  line-height: 1.02;
+  text-transform: uppercase;
+  color: var(--bean);
+}
+.cx-head p {
+  margin-top: 14px;
+  max-width: 560px;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.cx-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.9fr) minmax(0, 1fr);
+  gap: 24px;
+  align-items: stretch;
+}
+
+/* ---------- сцена ---------- */
+.cx-stage {
+  position: relative;
+  container-type: inline-size;
+  aspect-ratio: 8 / 5;
+  min-height: 0;
+  border-radius: 40px;
+  overflow: hidden;
+  background: var(--bg-2, #ffe8d9);
+  isolation: isolate;
+}
+.cx-scene {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.7s ease;
+  z-index: 0;
+}
+.cx-scene.is-on {
+  opacity: 1;
+}
+.cx-scene svg,
+.cx-scene-photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.cx-wall {
+  fill: var(--cx-wall);
+}
+.cx-floor {
+  fill: var(--cx-floor);
+}
+.cx-baseboard {
+  fill: var(--bean);
+  opacity: 0.06;
+}
+.cx-furn {
+  fill: var(--cx-furn);
+  stroke: var(--bean);
+  stroke-opacity: 0.12;
+  stroke-width: 2;
+}
+.cx-soft {
+  fill: var(--bean);
+  opacity: 0.05;
+}
+.cx-shade {
+  fill: var(--bean);
+  opacity: 0.1;
+}
+.cx-knob {
+  fill: var(--bean);
+  opacity: 0.35;
+}
+.cx-line {
+  stroke: var(--bean);
+  stroke-opacity: 0.18;
+  stroke-width: 3;
+  fill: none;
+}
+
+/* мягкий свет цвета выбранного изделия */
+.cx-glow {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background-color: var(--cx-tint);
+  opacity: 0.38;
+  mix-blend-mode: multiply;
+  -webkit-mask-image: radial-gradient(circle at var(--lx) var(--ly), #000 0, rgba(0, 0, 0, 0.35) 28%, transparent 62%);
+  mask-image: radial-gradient(circle at var(--lx) var(--ly), #000 0, rgba(0, 0, 0, 0.35) 28%, transparent 62%);
+  transition: background-color 0.6s ease;
+}
+
+/* ---------- предмет ---------- */
+.cx-item {
+  position: absolute;
+  z-index: 2;
+  transform: translateX(-50%);
+  transition: left 0.7s cubic-bezier(0.2, 0.7, 0.2, 1), bottom 0.7s cubic-bezier(0.2, 0.7, 0.2, 1),
+    width 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.cx-item-shadow {
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  bottom: -2%;
+  height: 7%;
+  border-radius: 50%;
+  background: rgba(30, 30, 30, 0.22);
+  filter: blur(6px);
+}
+.cx-item-body {
+  position: relative;
+  filter: drop-shadow(0 10px 8px rgba(30, 30, 30, 0.18));
+}
+.cx-item-body.is-lamp {
+  transform: translateY(8%);
+}
+.cx-item svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.cx-item .letters-preview {
+  width: 100% !important;
+  overflow: visible;
+}
+.cx-lamp {
+  aspect-ratio: 1;
+}
+.cx-lamp[hidden] {
+  display: none;
+}
+.cx-item .lamp-viewer {
+  width: 100%;
+  height: 100%;
+}
+.cx-photo {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.cx-pop {
+  animation: cx-pop 0.45s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+  transform-origin: 50% 100%;
+}
+@keyframes cx-pop {
+  from {
+    transform: scale(0.94);
+    opacity: 0.6;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+.cx-tag {
+  position: absolute;
+  z-index: 3;
+  left: 18px;
+  top: 18px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px 8px 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.82);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--bean);
+}
+.cx-tag i {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid var(--bean);
+  transition: background 0.4s;
+}
+
+/* ---------- панель ---------- */
+.cx-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  padding: 28px;
+  border-radius: 34px;
+  background: var(--beige, #ffe8d9);
+  min-width: 0;
+}
+.cx-live {
+  display: grid;
+  gap: 4px;
+}
+.cx-live-kicker {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.cx-live-name {
+  font-family: var(--font-logo), var(--font-main), sans-serif;
+  font-weight: 800;
+  font-size: clamp(28px, 3vw, 38px);
+  line-height: 1.05;
+  text-transform: uppercase;
+  color: var(--bean);
+}
+.cx-live-mood {
+  font-family: var(--hc-font-note, 'Caveat'), cursive;
+  font-size: 24px;
+  line-height: 1.1;
+  color: var(--cinnabar);
+}
+.cx-label {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.cx-note {
+  margin-top: 10px;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--muted);
+}
+
+.cx-pills {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+.cx-pill {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  padding: 12px 4px;
+  min-height: 44px;
+  border: 2px solid transparent;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.7);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--bean);
+  cursor: pointer;
+  transition: transform 0.2s, border-color 0.2s, background 0.2s;
+}
+.cx-pill svg,
+.cx-pill img {
+  width: 34px;
+  height: 42px;
+  object-fit: contain;
+}
+.cx-pill-letter {
+  height: 42px;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-logo), var(--font-main), sans-serif;
+  font-weight: 800;
+  font-size: 28px;
+  color: #c7a48c;
+  -webkit-text-stroke: 3px #c7a48c;
+  paint-order: stroke fill;
+}
+.cx-pill:hover {
+  transform: translateY(-3px);
+  background: #fff;
+}
+.cx-pill[aria-pressed='true'] {
+  border-color: var(--bean);
+  background: #fff;
+}
+
+.cx-swatches {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+  gap: 10px;
+}
+.cx-swatch {
+  position: relative;
+  width: 100%;
+  max-width: 48px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 2px solid rgba(30, 30, 30, 0.14);
+  cursor: pointer;
+  padding: 0;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.cx-swatch:hover {
+  transform: translateY(-4px) scale(1.05);
+}
+.cx-swatch:active {
+  transform: scale(0.96);
+}
+.cx-swatch[aria-checked='true'] {
+  box-shadow: 0 0 0 3px var(--beige, #ffe8d9), 0 0 0 5px var(--bean);
+  transform: scale(1.06);
+}
+
+.cx-pills-scene {
+  display: flex;
+  flex-wrap: wrap;
+}
+.cx-chip {
+  min-height: 44px;
+  padding: 10px 18px;
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.7);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--bean);
+  cursor: pointer;
+  transition: transform 0.2s, background 0.2s, color 0.2s;
+}
+.cx-chip:hover {
+  transform: translateY(-2px);
+  background: #fff;
+}
+.cx-chip[aria-pressed='true'] {
+  background: var(--bean);
+  color: #fff;
+}
+
+.cx-cta {
+  display: grid;
+  gap: 10px;
+  margin-top: auto;
+}
+.cx-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 52px;
+  padding: 14px 24px;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 700;
+  text-align: center;
+  transition: transform 0.2s, background 0.2s, color 0.2s;
+}
+.cx-btn-main {
+  background: #fb7449;
+  color: #fff;
+}
+.cx-btn-main:hover {
+  background: var(--bean);
+  transform: translateY(-3px);
+}
+.cx-btn-ghost {
+  background: transparent;
+  color: var(--bean);
+  border: 2px solid var(--bean);
+}
+.cx-btn-ghost:hover {
+  background: var(--bean);
+  color: #fff;
+  transform: translateY(-3px);
+}
+.cx-btn:active {
+  transform: scale(0.98);
+}
+
+.cx-pill:focus-visible,
+.cx-chip:focus-visible,
+.cx-swatch:focus-visible,
+.cx-btn:focus-visible {
+  outline: 3px solid var(--bean);
+  outline-offset: 3px;
+}
+
+/* ---------- адаптив ---------- */
+@media (max-width: 1023px) {
+  .cx {
+    margin-top: 64px;
+  }
+  .cx-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .cx-panel {
+    padding: 24px;
+  }
+  .cx-cta {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (max-width: 560px) {
+  .cx {
+    margin-top: 48px;
+  }
+  .cx-stage {
+    border-radius: 28px;
+    min-height: 0;
+  }
+  .cx-tag {
+    left: 12px;
+    top: 12px;
+    font-size: 12px;
+  }
+  .cx-panel {
+    padding: 20px 16px;
+    border-radius: 28px;
+  }
+  .cx-pills {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .cx-pills-scene {
+    display: flex;
+  }
+  .cx-swatches {
+    grid-template-columns: repeat(auto-fill, minmax(44px, 1fr));
+    gap: 12px;
+  }
+  .cx-swatch {
+    max-width: 52px;
+  }
+  .cx-cta {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cx *,
+  .cx-item {
+    transition: none !important;
+    animation: none !important;
+  }
+}

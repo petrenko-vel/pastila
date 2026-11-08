@@ -1,13 +1,22 @@
 'use client';
 
-import Link from 'next/link';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Reveal from '../../components/Reveal';
-import { useCart, useFavs } from '../../components/CartProvider';
-import { ArrowIcon, FilterIcon, HeartIcon } from '../../components/Icons';
-import { img } from '../../lib/base';
-import { categoryNames, Category, formatPrice, palette, products } from '../../lib/products';
+import { useFavs } from '../../components/CartProvider';
+import { FilterIcon } from '../../components/Icons';
+import { categoryNames, Category, palette, products } from '../../lib/products';
+import { collections } from '../../lib/collections';
+import ProductCard from './ProductCard';
+import './catalog.css';
+
+type Sort = 'default' | 'price-asc' | 'price-desc' | 'title';
+const sortLabels: Record<Sort, string> = {
+  default: 'По умолчанию',
+  'price-asc': 'Цена: по возрастанию',
+  'price-desc': 'Цена: по убыванию',
+  title: 'По названию',
+};
 
 const cats: ('all' | Category)[] = ['all', 'lamp', 'shade', 'vase', 'switch', 'letters', 'other'];
 
@@ -19,39 +28,38 @@ export default function CatalogView() {
   const [q, setQ] = useState('');
   const [open, setOpen] = useState(false);
   const searchRef = useRef<HTMLInputElement>(null);
-  const { add } = useCart();
-  const { favs, toggle } = useFavs();
-  const [added, setAdded] = useState<string | null>(null);
+  const { favs } = useFavs();
+  const [sort, setSort] = useState<Sort>('default');
+  const [collectionSlug, setCollectionSlug] = useState<string | null>(null);
+  const collection = collections.find((c) => c.slug === collectionSlug) ?? null;
 
   useEffect(() => {
     const c = params.get('cat');
-    if (c && (cats as string[]).includes(c)) setCat(c as Category);
+    setCat(c && (cats as string[]).includes(c) ? (c as Category) : 'all');
     const col = params.get('color');
-    if (col && palette.some((p) => p.key === col)) setColor(col);
+    setColor(col && palette.some((p) => p.key === col) ? col : 'all');
+    const cl = params.get('collection');
+    setCollectionSlug(cl && collections.some((x) => x.slug === cl) ? cl : null);
     setOnlyFav(params.get('fav') === '1');
     // ссылки с готовым цветом или избранным сразу раскрывают панель фильтров
     if (params.get('fav') === '1' || (col && palette.some((p) => p.key === col))) setOpen(true);
     if (params.get('focus') === 'search') searchRef.current?.focus();
   }, [params]);
 
-  const list = useMemo(
-    () =>
-      products.filter(
+  const list = useMemo(() => {
+    const filtered = products.filter(
         (p) =>
+          (!collection || collection.productIds.includes(p.id)) &&
           (cat === 'all' || p.category === cat) &&
           (color === 'all' || p.color === color) &&
           (!onlyFav || favs.includes(p.id)) &&
           (!q.trim() || (p.title + ' ' + p.desc).toLowerCase().includes(q.trim().toLowerCase()))
-      ),
-    [cat, color, onlyFav, q, favs]
-  );
-
-  const buy = (id: string) => {
-    const p = products.find((x) => x.id === id)!;
-    add({ id: p.id, title: p.title, price: p.price, image: p.image });
-    setAdded(id);
-    setTimeout(() => setAdded((v) => (v === id ? null : v)), 1400);
-  };
+      );
+    if (sort === 'price-asc') return [...filtered].sort((a, b) => a.price - b.price);
+    if (sort === 'price-desc') return [...filtered].sort((a, b) => b.price - a.price);
+    if (sort === 'title') return [...filtered].sort((a, b) => a.title.localeCompare(b.title, 'ru'));
+    return filtered;
+  }, [cat, color, onlyFav, q, favs, sort, collection]);
 
   return (
     <div className="catalog-page">
@@ -79,8 +87,18 @@ export default function CatalogView() {
             <FilterIcon /> Фильтры
             {(color !== 'all' ? 1 : 0) + (onlyFav ? 1 : 0) > 0 && <span className="filters-count">{(color !== 'all' ? 1 : 0) + (onlyFav ? 1 : 0)}</span>}
           </button>
+          <div className="cg-sortwrap">
+            <select className="cg-select" aria-label="Сортировка" value={sort} onChange={(e) => setSort(e.target.value as Sort)}>
+              {(Object.keys(sortLabels) as Sort[]).map((k) => (
+                <option key={k} value={k}>
+                  {sortLabels[k]}
+                </option>
+              ))}
+            </select>
+          </div>
           <input
             ref={searchRef}
+            aria-label="Поиск по каталогу"
             className="search-input"
             placeholder="Поиск по каталогу"
             value={q}
@@ -88,6 +106,17 @@ export default function CatalogView() {
           />
         </div>
       </div>
+
+      {collection && (
+        <div className="cg-collection">
+          <span>
+            Коллекция: <b>{collection.title}</b>
+          </span>
+          <button type="button" onClick={() => setCollectionSlug(null)}>
+            Сбросить
+          </button>
+        </div>
+      )}
 
       {open && (
         <div className="filters-panel" id="filters-panel">
@@ -125,37 +154,32 @@ export default function CatalogView() {
       )}
 
       {list.length === 0 ? (
-        <p className="empty">Ничего не нашлось — попробуй изменить фильтры ♡</p>
+        <div className="empty">
+          <p>
+            {cat !== 'all' && color === 'all' && !onlyFav && !q.trim() && !collection
+              ? 'В этой категории пока нет изделий ♡'
+              : 'Ничего не нашлось — попробуй изменить фильтры ♡'}
+          </p>
+          <button
+            type="button"
+            className="btn btn-brown btn-sm"
+            style={{ marginTop: 16 }}
+            onClick={() => {
+              setCat('all');
+              setColor('all');
+              setOnlyFav(false);
+              setQ('');
+              setCollectionSlug(null);
+            }}
+          >
+            Показать все
+          </button>
+        </div>
       ) : (
         <div className="grid">
           {list.map((p, i) => (
             <Reveal key={p.id} delay={(i % 4) * 70}>
-              <article className="pcard">
-                <div className="pimg">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={img(p.image)} alt={p.title} loading="lazy" />
-                  <button className={`heart-mini ${favs.includes(p.id) ? 'on' : ''}`} aria-label="В избранное" onClick={() => toggle(p.id)}>
-                    <HeartIcon filled={favs.includes(p.id)} />
-                  </button>
-                </div>
-                <div className="pbody">
-                  <small>{categoryNames[p.category]}</small>
-                  <h3>{p.title}</h3>
-                  <p>{p.desc}</p>
-                  <div className={`prow${p.href ? ' prow-stack' : ''}`}>
-                    <span className="price">{p.priceFrom ? 'от ' : ''}{formatPrice(p.price)}</span>
-                    {p.href ? (
-                      <Link className="btn btn-brown btn-sm" href={p.href}>
-                        {p.cta ?? 'Подробнее'} <ArrowIcon size={15} />
-                      </Link>
-                    ) : (
-                      <button className="btn btn-brown btn-sm" onClick={() => buy(p.id)}>
-                        {added === p.id ? 'Добавлено ✓' : 'В корзину'}
-                      </button>
-                    )}
-                  </div>
-                </div>
-              </article>
+              <ProductCard p={p} />
             </Reveal>
           ))}
         </div>

@@ -1,6 +1,16 @@
 import Link from 'next/link';
 import Reveal from '../components/Reveal';
 import { SHOW_HIDDEN_BLOCKS } from '../lib/flags';
+import Bestsellers from '../components/home/Bestsellers';
+import InteriorKits from '../components/home/InteriorKits';
+import NewArrivals from '../components/home/NewArrivals';
+import RealLife from '../components/home/RealLife';
+import BrandStory from '../components/home/BrandStory';
+import Packaging from '../components/home/Packaging';
+import ProductionStory from '../components/home/ProductionStory';
+import Faq from '../components/home/Faq';
+import Collections from '../components/collections/Collections';
+import ColorExperience from '../components/color-experience/ColorExperience';
 import HeroCarousel from '../components/HeroCarousel';
 import { img } from '../lib/base';
 import { ArrowIcon, ArrowUpRightIcon } from '../components/Icons';
@@ -113,6 +123,11 @@ export default function Home() {
         </Reveal>
       </section>
 
+      <Bestsellers />
+      <InteriorKits />
+      <Collections />
+      <ColorExperience />
+
       {SHOW_HIDDEN_BLOCKS && (
         <>
       {/* ПАЛИТРА + 24Ч */}
@@ -200,6 +215,12 @@ export default function Home() {
         </div>
       </section>
 
+      <NewArrivals />
+      <ProductionStory />
+      <RealLife />
+      <BrandStory />
+      <Packaging />
+
       {/* ОТЗЫВЫ / О НАС / FAQ */}
       <section className={`container wide bottom${SHOW_HIDDEN_BLOCKS ? '' : ' bottom-solo'}`} id="about">
         <Reveal className="bottom-reviews">
@@ -228,6 +249,8 @@ export default function Home() {
           </>
         )}
       </section>
+
+      <Faq />
 
       <div className="blob-decor" aria-hidden>
         <svg className="bl bl-green" viewBox="0 0 200 180"><path d="M0 40c40-20 90 10 120 60s60 30 80 80H0z" fill="currentColor" /></svg>

@@ -1,0 +1,127 @@
+/* Каталог: дополнения. Префикс cg- */
+.cg-imglink {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.cg-titlelink {
+  transition: color 0.2s;
+}
+.cg-titlelink:hover {
+  color: var(--cinnabar);
+}
+.catalog-page .cg-imglink:focus-visible,
+.catalog-page .cg-titlelink:focus-visible,
+.catalog-page .cg-dot:focus-visible,
+.catalog-page .cg-more:focus-visible,
+.catalog-page .cg-select:focus-visible,
+.catalog-page .heart-mini:focus-visible {
+  outline: 3px solid var(--bean);
+  outline-offset: 2px;
+}
+.cg-colors {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+.cg-dot {
+  width: 22px;
+  height: 22px;
+  padding: 0;
+}
+.cg-more {
+  min-width: 30px;
+  height: 22px;
+  padding: 0 8px;
+  border-radius: 999px;
+  background: var(--bg);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--bean);
+  transition: background 0.2s, color 0.2s, transform 0.2s;
+}
+.cg-more:hover {
+  background: var(--bean);
+  color: #fff;
+}
+.cg-more:active,
+.catalog-page .btn:active {
+  transform: scale(0.98);
+}
+
+.cg-sortwrap {
+  position: relative;
+  display: inline-flex;
+}
+.cg-select {
+  appearance: none;
+  -webkit-appearance: none;
+  border: 0;
+  border-radius: 999px;
+  padding: 10px 36px 10px 16px;
+  background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%231E1E1E' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 14px center;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--bean);
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+.cg-select:hover {
+  background-color: var(--bg-2, #ffe8d9);
+}
+
+.cg-collection {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 14px;
+  margin: 14px 0 6px;
+  padding: 12px 18px;
+  border-radius: 22px;
+  background: var(--yellow);
+  color: var(--bean);
+  font-size: 14px;
+}
+.cg-collection b {
+  font-weight: 800;
+}
+.cg-collection button {
+  margin-left: auto;
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: var(--bean);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  transition: transform 0.2s;
+}
+.cg-collection button:hover {
+  transform: translateY(-1px);
+}
+.cg-collection button:active {
+  transform: scale(0.98);
+}
+.catalog-page .cg-collection button:focus-visible {
+  outline: 3px solid var(--bean);
+  outline-offset: 2px;
+}
+
+@media (max-width: 560px) {
+  .cg-sortwrap,
+  .cg-select {
+    width: 100%;
+  }
+  .toolbar-tools {
+    flex-wrap: wrap;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .catalog-page .cg-more,
+  .catalog-page .cg-select,
+  .catalog-page .cg-collection button {
+    transition: none;
+  }
+}

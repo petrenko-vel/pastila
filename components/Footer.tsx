@@ -3,19 +3,21 @@ import { ArrowIcon, SunIcon } from './Icons';
 import LampViewer from './LampViewer';
 import { img } from '../lib/base';
 import { categoryNames } from '../lib/products';
-import { SHOW_HIDDEN_BLOCKS } from '../lib/flags';
+import { collections } from '../lib/collections';
+import { siteConfig } from '../lib/site-config';
+import './home/story-blocks.css';
 import type { Category } from '../lib/products';
 
 const allSections = [
   { href: '/catalog', label: 'Каталог' },
   { href: '/generator', label: 'Генератор' },
-  { href: '/#about', label: 'О студии' },
+  { href: '/about', label: 'О студии' },
   { href: '/#faq', label: 'FAQ' },
   { href: '/#reviews', label: 'Отзывы' },
   { href: '/cart', label: 'Корзина' },
 ];
 
-const sections = allSections.filter((s) => SHOW_HIDDEN_BLOCKS || (s.href !== '/#about' && s.href !== '/#faq'));
+const sections = allSections;
 
 const docs = [
   { href: '/privacy', label: 'Политика конфиденциальности' },
@@ -30,6 +32,11 @@ const ticker = ['Вазы', 'Лампы', 'Буквы', 'Накладки', 'П�
 
 export default function Footer() {
   const year = new Date().getFullYear();
+  const email = siteConfig.email.trim();
+  const phone = siteConfig.phone.trim();
+  const address = siteConfig.address.trim();
+  const socials = siteConfig.socials.filter((s) => s.label.trim() && s.href.trim());
+  const hasContacts = Boolean(email || phone || address || socials.length);
   return (
     <footer className="footer">
       <div className="foot-marquee" aria-hidden>
@@ -53,7 +60,7 @@ export default function Footer() {
         <div className="foot-panel">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img className="foot-flower" src={img('/img/foot-flower.webp')} alt="" aria-hidden width={640} height={738} loading="lazy" decoding="async" />
-          <div className="foot-top">
+          <div className="foot-top foot-top-x">
             <nav className="foot-col" aria-label="Разделы сайта">
               <h3>Разделы</h3>
               <ul>
@@ -76,6 +83,24 @@ export default function Footer() {
               </ul>
             </nav>
 
+            <nav className="foot-col" aria-label="Коллекции">
+              <h3>Коллекции</h3>
+              <ul>
+                {collections.map((c) =>
+                  c.status === 'coming-soon' ? (
+                    <li key={c.slug} className="foot-x-soon">
+                      {c.title}
+                      <em>скоро</em>
+                    </li>
+                  ) : (
+                    <li key={c.slug}>
+                      <Link href={`/catalog/?collection=${c.slug}`}>{c.title}</Link>
+                    </li>
+                  )
+                )}
+              </ul>
+            </nav>
+
             <div className="foot-side">
               <div className="foot-cta">
                 <p>Придумай свой декор: выбери форму, цвет и размер, цена посчитается сразу.</p>
@@ -94,6 +119,33 @@ export default function Footer() {
                   </Link>
                 </div>
               </div>
+
+              {hasContacts && (
+                <div className="foot-contacts" aria-label="Контакты">
+                  <ul className="foot-x-contacts">
+                    {email && (
+                      <li>
+                        <a href={`mailto:${email}`}>{email}</a>
+                      </li>
+                    )}
+                    {phone && (
+                      <li>
+                        <a href={`tel:${phone.replace(/[^\d+]/g, '')}`}>{phone}</a>
+                      </li>
+                    )}
+                    {address && <li>{address}</li>}
+                  </ul>
+                  {socials.length > 0 && (
+                    <div className="foot-x-socials">
+                      {socials.map((s) => (
+                        <a key={s.href} href={s.href} target="_blank" rel="noopener noreferrer">
+                          {s.label}
+                        </a>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
 
               <nav className="foot-legal" aria-label="Документы">
                 <span>© {year} pastila. Студия 3D-печати</span>

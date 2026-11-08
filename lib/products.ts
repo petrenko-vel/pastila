@@ -12,6 +12,8 @@ export type Product = {
   href?: string;
   cta?: string;
   priceFrom?: boolean;
+  /** дополнительные фото товара (public/img); основное фото `image` показывается первым */
+  gallery?: string[];
 };
 
 export const categoryNames: Record<Category, string> = {

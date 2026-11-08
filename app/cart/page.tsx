@@ -3,93 +3,119 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { useCart } from '../../components/CartProvider';
-import { img } from '../../lib/base';
+import CartLine from '../../components/cart/CartLine';
 import { formatPrice } from '../../lib/products';
 
-export default function CartPage() {
-  const { items, total, setQty, remove, clear } = useCart();
-  const [done, setDone] = useState(false);
+function plural(n: number) {
+  const m10 = n % 10;
+  const m100 = n % 100;
+  if (m10 === 1 && m100 !== 11) return 'товар';
+  if (m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14)) return 'товара';
+  return 'товаров';
+}
 
-  if (done)
+export default function CartPage() {
+  const { items, ready, count, total, setQty, remove, clear } = useCart();
+  const [confirm, setConfirm] = useState(false);
+
+  if (!ready) {
     return (
-      <div className="page container">
+      <div className="page container ct-page">
         <div className="page-head">
-          <h1>Спасибо за заказ ♡</h1>
-          <p>Это демо-версия сайта: оплата не подключена, ничего не отправлено.</p>
-          <Link href="/catalog" className="btn btn-brown" style={{ marginTop: 22 }}>
-            В каталог
-          </Link>
+          <h1>Корзина</h1>
         </div>
       </div>
     );
+  }
 
-  return (
-    <div className="page container">
-      <div className="page-head">
-        <h1>Корзина</h1>
-      </div>
-
-      {items.length === 0 ? (
-        <>
-          <p className="empty">В корзине пока пусто ♡</p>
-          <div style={{ textAlign: 'center' }}>
-            <Link href="/catalog" className="btn btn-brown">
+  if (items.length === 0) {
+    return (
+      <div className="page container ct-page">
+        <div className="page-head">
+          <h1>Корзина</h1>
+        </div>
+        <div className="ct-empty">
+          <div className="ct-empty-mark" aria-hidden="true">
+            ♡
+          </div>
+          <h2>В корзине пока пусто</h2>
+          <p>Загляните в каталог или соберите своё изделие в генераторе.</p>
+          <div className="ct-empty-actions">
+            <Link href="/catalog/" className="btn btn-brown">
               Перейти в каталог
             </Link>
+            <Link href="/generator/" className="btn ct-btn-line">
+              Собрать в генераторе
+            </Link>
           </div>
-        </>
-      ) : (
-        <>
-          <div className="cart-list">
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="page container ct-page ct-has-bar">
+      <div className="page-head">
+        <h1>Корзина</h1>
+        <p>
+          {count} {plural(count)}
+        </p>
+      </div>
+
+      <div className="ct-layout">
+        <section aria-label="Товары в корзине">
+          <ul className="ct-list">
             {items.map((i) => (
-              <div className="cart-row" key={i.id}>
-                {i.image ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={img(i.image)} alt="" />
-                ) : (
-                  <div className="ph" />
-                )}
-                <div>
-                  <h3>{i.title}</h3>
-                  {i.note && <small>{i.note}</small>}
-                  <div>
-                    <button className="x-btn" onClick={() => remove(i.id)}>
-                      Удалить
-                    </button>
-                  </div>
-                </div>
-                <div className="qty">
-                  <button onClick={() => setQty(i.id, i.qty - 1)} aria-label="Меньше">
-                    −
-                  </button>
-                  <span>{i.qty}</span>
-                  <button onClick={() => setQty(i.id, i.qty + 1)} aria-label="Больше">
-                    +
-                  </button>
-                </div>
-                <b className="row-sum price">{formatPrice(i.price * i.qty)}</b>
-              </div>
+              <CartLine key={i.id} item={i} onQty={(q) => setQty(i.id, q)} onRemove={() => remove(i.id)} />
             ))}
-          </div>
-          <div className="cart-total">
-            <button className="x-btn" onClick={clear}>
-              Очистить корзину
-            </button>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
-              <span className="price">{formatPrice(total)}</span>
-              <button
-                className="btn btn-brown"
-                onClick={() => {
-                  setDone(true);
-                  clear();
-                }}
-              >
-                Оформить заказ
+          </ul>
+
+          <div className="ct-clear">
+            {confirm ? (
+              <div className="ct-confirm" role="alertdialog" aria-label="Очистить корзину?">
+                <span>Удалить все товары из корзины?</span>
+                <button
+                  type="button"
+                  className="btn btn-brown btn-sm"
+                  onClick={() => {
+                    clear();
+                    setConfirm(false);
+                  }}
+                >
+                  Да, очистить
+                </button>
+                <button type="button" className="btn ct-btn-line btn-sm" onClick={() => setConfirm(false)} autoFocus>
+                  Оставить
+                </button>
+              </div>
+            ) : (
+              <button type="button" className="ct-link-btn" onClick={() => setConfirm(true)}>
+                Очистить корзину
               </button>
-            </div>
+            )}
           </div>
-        </>
-      )}
+        </section>
+
+        <aside className="ct-summary ct-summary-sticky" aria-label="Итог заказа">
+          <h2>Ваш заказ</h2>
+          <dl className="ct-sum-rows">
+            <div>
+              <dt>
+                {count} {plural(count)}
+              </dt>
+              <dd>{formatPrice(total)}</dd>
+            </div>
+          </dl>
+          <div className="ct-sum-total">
+            <span>Итого</span>
+            <b>{formatPrice(total)}</b>
+          </div>
+          <Link href="/checkout/" className="btn btn-brown ct-sum-btn">
+            Оформить заказ
+          </Link>
+          <p className="ct-note">Доставка и оплата уточняются при оформлении.</p>
+        </aside>
+      </div>
     </div>
   );
 }

@@ -63,34 +63,33 @@ export function RecentGrid() {
 }
 
 /* ---------- Отзывы ---------- */
-const reviews = [
-  { text: '«Классный магазин! Декор просто любовь ♡»', name: 'Алина' },
-  { text: '«Лампа-грибок теперь главный герой спальни. Свет очень мягкий!»', name: 'Мария' },
-  { text: '«Заказала накладки на выключатели — гости спрашивают, где купила.»', name: 'Дарья' },
-];
+// Реальных отзывов пока нет. Когда появятся, добавляй их сюда: { text, name }. Выдуманные отзывы и рейтинг не показываем.
+const reviews: { text: string; name: string }[] = [];
 
 export function ReviewsBlock() {
   const [i, setI] = useState(0);
   const go = (d: number) => setI((v) => (v + d + reviews.length) % reviews.length);
+
+  if (reviews.length === 0) {
+    return (
+      <div className="reviews card-soft reviews-empty-wrap" id="reviews">
+        <h2>Отзывы</h2>
+        <p className="reviews-empty">Здесь появятся отзывы покупателей. Пока их нет: мы только начинаем, и ваш может стать первым.</p>
+        <Link href="/catalog" className="link-u">
+          Выбрать изделие <ArrowIcon size={14} />
+        </Link>
+      </div>
+    );
+  }
+
   return (
     <div className="reviews card-soft" id="reviews">
       <h2>Отзывы</h2>
-      <div className="rating-row">
-        <span className="rating">4.9</span>
-        <span className="stars">
-          {Array.from({ length: 5 }).map((_, k) => (
-            <StarIcon key={k} />
-          ))}
-        </span>
-        <span className="based">на основе 1000+ заказов</span>
-      </div>
       <div className="review-body">
         <button className="arrow-btn" aria-label="Назад" onClick={() => go(-1)}>
           <ArrowIcon size={14} />
         </button>
         <div className="review-card" key={i}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={img('/img/avatar.webp')} alt="" className="avatar" />
           <p>{reviews[i].text}</p>
         </div>
         <button className="arrow-btn flip" aria-label="Дальше" onClick={() => go(1)}>

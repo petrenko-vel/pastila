@@ -1,0 +1,513 @@
+/* Страница товара. Префикс pd- */
+.pd-page {
+  background: var(--bg);
+  min-height: 100vh;
+  padding: 112px 0 96px;
+}
+body:has(.pd-page) {
+  background: var(--bg);
+}
+.pd-crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 22px;
+}
+.pd-crumbs a {
+  font-weight: 600;
+  color: var(--bean);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: transparent;
+  transition: text-decoration-color 0.2s;
+}
+.pd-crumbs a:hover {
+  text-decoration-color: var(--cinnabar);
+}
+.pd-page a:focus-visible,
+.pd-page button:focus-visible {
+  outline: 3px solid var(--bean);
+  outline-offset: 3px;
+}
+
+.pd-top {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: 48px;
+  align-items: start;
+}
+
+/* галерея */
+.pd-gallery {
+  position: sticky;
+  top: 100px;
+}
+.pd-main {
+  border-radius: 36px;
+  overflow: hidden;
+  background: var(--beige);
+  aspect-ratio: 1 / 1;
+  cursor: zoom-in;
+}
+.pd-main img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+@media (hover: hover) {
+  .pd-main:hover img {
+    transform: scale(1.7);
+  }
+}
+.pd-thumbs {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+.pd-thumb {
+  width: 76px;
+  height: 76px;
+  border-radius: 18px;
+  overflow: hidden;
+  background: var(--beige);
+  border: 3px solid transparent;
+  transition: transform 0.2s, border-color 0.2s;
+}
+.pd-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.pd-thumb:hover {
+  transform: translateY(-3px);
+}
+.pd-thumb:active {
+  transform: scale(0.98);
+}
+.pd-thumb.on {
+  border-color: var(--bean);
+}
+
+/* информация */
+.pd-cat {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+}
+.pd-title {
+  margin-top: 6px;
+  font-family: var(--font-logo), sans-serif;
+  font-weight: 800;
+  font-size: clamp(30px, 4.2vw, 48px);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  color: var(--bean);
+}
+.pd-desc {
+  margin-top: 12px;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.5;
+}
+.pd-price {
+  margin-top: 18px;
+  font-size: 30px;
+  font-weight: 800;
+  color: var(--bean);
+  white-space: nowrap;
+}
+.pd-colors {
+  margin-top: 24px;
+  padding: 18px 20px;
+  border-radius: 24px;
+  background: #fff;
+}
+.pd-label {
+  font-size: 13px;
+  color: var(--muted);
+}
+.pd-label b {
+  color: var(--bean);
+  font-weight: 700;
+}
+.pd-colors-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 12px;
+}
+.pd-big-sw {
+  flex: none;
+  width: 64px;
+  height: 64px;
+  border-radius: 20px;
+  box-shadow: inset 0 0 0 1px rgba(30, 30, 30, 0.22);
+  transition: background 0.25s;
+}
+.pd-sw-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.pd-sw {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 0;
+  box-shadow: inset 0 0 0 1px rgba(30, 30, 30, 0.22);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.pd-sw:hover {
+  transform: scale(1.15);
+}
+.pd-sw:active {
+  transform: scale(0.95);
+}
+.pd-sw.on {
+  box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--bean);
+}
+.pd-note {
+  margin-top: 12px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.pd-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 22px;
+  flex-wrap: wrap;
+}
+.pd-qty {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  background: #fff;
+}
+.pd-qty button {
+  width: 44px;
+  height: 48px;
+  font-size: 20px;
+  font-weight: 700;
+  border-radius: 999px;
+  transition: background 0.2s, color 0.2s;
+}
+.pd-qty button:hover:not(:disabled) {
+  background: var(--bean);
+  color: #fff;
+}
+.pd-qty button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+.pd-qty output {
+  min-width: 28px;
+  text-align: center;
+  font-weight: 700;
+}
+.pd-buy {
+  flex: 1;
+  justify-content: center;
+  min-width: 190px;
+  padding: 16px 28px;
+}
+.pd-buy.done {
+  background: var(--cinnabar);
+}
+.pd-page .btn:active,
+.pd-fav:active {
+  transform: scale(0.98);
+}
+.pd-fav {
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #fff;
+  color: var(--bean);
+  transition: background 0.2s, color 0.2s, transform 0.2s;
+}
+.pd-fav svg {
+  width: 22px;
+  height: 22px;
+}
+.pd-fav:hover {
+  background: var(--bean);
+  color: #fff;
+}
+.pd-fav.on {
+  color: var(--cinnabar);
+}
+.pd-fav.on:hover {
+  background: var(--bean);
+}
+.pd-status {
+  min-height: 24px;
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.pd-cartlink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+  color: var(--bean);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.pd-cartlink:hover {
+  color: var(--cinnabar);
+}
+.pd-facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+  list-style: none;
+  padding: 0;
+}
+.pd-facts li {
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: var(--carnation);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--bean);
+}
+
+/* блоки */
+.pd-block {
+  margin-top: 72px;
+}
+.pd-h2 {
+  font-family: var(--font-logo), sans-serif;
+  font-weight: 800;
+  font-size: clamp(22px, 3vw, 30px);
+  text-transform: uppercase;
+  color: var(--bean);
+  margin-bottom: 16px;
+}
+.pd-muted {
+  color: var(--muted);
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+.pd-spec {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 12px;
+  margin: 0;
+}
+.pd-spec > div {
+  padding: 14px 18px;
+  border-radius: 20px;
+  background: #fff;
+}
+.pd-spec dt {
+  font-size: 12px;
+  color: var(--muted);
+}
+.pd-spec dd {
+  margin: 4px 0 0;
+  font-weight: 700;
+  color: var(--bean);
+}
+.pd-spec dd.tbd {
+  font-weight: 500;
+  color: var(--muted);
+}
+
+/* масштаб */
+.pd-scale {
+  margin: 0;
+  padding: 24px;
+  border-radius: 28px;
+  background: #fff;
+}
+.pd-scale-stage {
+  display: flex;
+  align-items: flex-end;
+  gap: 28px;
+  border-bottom: 2px solid var(--bean);
+  padding: 0 12px;
+  overflow-x: auto;
+}
+.pd-sil {
+  position: relative;
+  flex: none;
+  border-radius: 14px 14px 4px 4px;
+  display: grid;
+  place-items: center;
+}
+.pd-sil span {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 0 4px;
+}
+.pd-sil-obj {
+  background: var(--cinnabar);
+  color: #fff;
+}
+.pd-sil-ref {
+  background: var(--beige);
+  color: var(--bean);
+}
+.pd-scale figcaption {
+  margin-top: 12px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* медиа */
+.pd-media {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+.pd-media img,
+.pd-media video {
+  width: 100%;
+  border-radius: 28px;
+  background: var(--beige);
+}
+
+/* фактура */
+.pd-tex {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+.pd-tex-i {
+  aspect-ratio: 1 / 1;
+  border-radius: 28px;
+  background-size: 360%;
+  background-repeat: no-repeat;
+  background-color: var(--beige);
+  transition: background-size 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+@media (hover: hover) {
+  .pd-tex-i:hover {
+    background-size: 460%;
+  }
+}
+
+/* отзывы */
+.pd-empty {
+  padding: 28px;
+  border-radius: 24px;
+  background: #fff;
+  color: var(--muted);
+  text-align: center;
+}
+.pd-reviews {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+}
+.pd-reviews li {
+  padding: 18px 20px;
+  border-radius: 22px;
+  background: #fff;
+}
+.pd-reviews li span {
+  margin-left: 10px;
+  color: var(--cinnabar);
+}
+.pd-reviews p {
+  margin: 6px 0;
+}
+.pd-reviews small {
+  color: var(--muted);
+}
+
+/* сочетается с */
+.pd-related {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 22px;
+}
+.pd-related .pcard {
+  background: #fff;
+}
+.pd-related .pimg {
+  display: block;
+}
+.pd-related .pbody h3 a:hover {
+  color: var(--cinnabar);
+}
+
+/* липкая кнопка на телефоне */
+.pd-sticky {
+  display: none;
+}
+
+@media (max-width: 1023px) {
+  .pd-top {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+  .pd-gallery {
+    position: static;
+  }
+  .pd-related {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 560px) {
+  .pd-page {
+    padding: 96px 0 110px;
+  }
+  .pd-block {
+    margin-top: 52px;
+  }
+  .pd-colors-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .pd-tex {
+    grid-template-columns: 1fr 1fr;
+  }
+  .pd-tex-i:last-child {
+    display: none;
+  }
+  .pd-related {
+    gap: 14px;
+  }
+  .pd-sticky {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 40;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+    background: var(--bg);
+    box-shadow: 0 -10px 24px -16px rgba(30, 30, 30, 0.45);
+  }
+  .pd-sticky .btn {
+    flex: 1;
+    justify-content: center;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pd-page *,
+  .pd-page *::before {
+    transition: none !important;
+  }
+  .pd-main:hover img {
+    transform: none;
+  }
+}
